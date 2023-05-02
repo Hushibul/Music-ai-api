@@ -1,13 +1,17 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const authRoute = require("./auth/Auth");
+const cors = require("cors");
+
+const authRoute = require("./routes/AuthRoute");
 const musicRoute = require("./routes/MusicRoute");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(cors());
 
 app.use("/api/", authRoute);
 app.use("/api/", musicRoute);
@@ -22,3 +26,6 @@ mongoose
 app.listen(process.env.PORT, () =>
   console.log(`Server is running at ${process.env.PORT}`)
 );
+
+//Error middleware
+app.use(errorHandler);
