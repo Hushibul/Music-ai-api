@@ -1,19 +1,31 @@
+const fs = require("fs");
+const path = require("path");
+
 const Music = require("../models/MusicModel");
 
 //Upload Music
 const uploadMusic = async (req, res, next) => {
   try {
-    const { name, genre } = req.body;
+    const url = req.protocol + "://" + req.get("host");
 
+    const { name, genre } = req.body;
     const existingMusic = await Music.findOne({ name });
 
+    const music = req.file.filename;
+    const musicUrl = url + "/uploads/" + music;
+
     if (existingMusic) {
+      const musicUrl = "../uploads/" + music;
+      const filePath = path.join(__dirname, musicUrl);
+
+      fs.unlinkSync(filePath);
+
       res.status(203).json({
         success: false,
         message: "Music with this name already exists!",
       });
     } else {
-      const music = new Music({ name, genre });
+      const music = new Music({ name, genre, music: musicUrl });
 
       await music.save();
       res.status(201).json({ success: true, music });
@@ -84,6 +96,15 @@ const updateMusic = async (req, res, next) => {
 const deleteMusic = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    const musicUrl = await Music.findById({ _id: id });
+    if (musicUrl !== null) {
+      const musicPath = "../uploads" + musicUrl.music.split("uploads")[1];
+
+      const filePath = path.join(__dirname, musicPath);
+
+      fs.unlinkSync(filePath);
+    }
 
     const music = await Music.findByIdAndDelete({ _id: id });
 

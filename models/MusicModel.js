@@ -10,6 +10,10 @@ const musicSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
+  music : {
+    type: String,
+  }
+  
 });
 
 const Music = mongoose.model("Music", musicSchema);

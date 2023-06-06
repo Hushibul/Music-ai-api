@@ -11,11 +11,12 @@ const {
   deleteMusic,
   getAllMusic,
 } = require("../controller/MusicController");
+const upload = require("../middleware/multer");
 
 const router = express.Router();
 
 //Create New Music
-router.post("/music/upload", uploadMusic);
+router.post("/music/upload",upload.single("music"), uploadMusic);
 
 //Getting a Music
 router.get("/music/:id", getSingleMusic);
@@ -27,6 +28,6 @@ router.get("/music", getAllMusic);
 router.put("/music/:id", verifyTokenAndAdmin, updateMusic);
 
 //Delete Music
-router.delete("/music/:id", verifyToken, deleteMusic);
+router.delete("/music/:id",  deleteMusic);
 
 module.exports = router;
