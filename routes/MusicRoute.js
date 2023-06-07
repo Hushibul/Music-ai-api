@@ -16,7 +16,7 @@ const upload = require("../middleware/multer");
 const router = express.Router();
 
 //Create New Music
-router.post("/music/upload",upload.single("music"), uploadMusic);
+router.post("/music/upload", upload.single("music"), uploadMusic);
 
 //Getting a Music
 router.get("/music/:id", getSingleMusic);
@@ -25,9 +25,9 @@ router.get("/music/:id", getSingleMusic);
 router.get("/music", getAllMusic);
 
 //Update Music
-router.put("/music/:id", verifyTokenAndAdmin, updateMusic);
+router.put("/music/:id", upload.single("music"), updateMusic);
 
 //Delete Music
-router.delete("/music/:id",  deleteMusic);
+router.delete("/music/:id", deleteMusic);
 
 module.exports = router;

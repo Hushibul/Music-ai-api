@@ -10,10 +10,10 @@ const musicSchema = new mongoose.Schema({
     type: Array,
     required: true,
   },
-  music : {
+  music: {
     type: String,
-  }
-  
+    required: true,
+  },
 });
 
 const Music = mongoose.model("Music", musicSchema);
