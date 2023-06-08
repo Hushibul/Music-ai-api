@@ -3,13 +3,14 @@ const { deleteMusicFile } = require("../utils/utils");
 
 //Upload Music
 const uploadMusic = async (req, res, next) => {
+  let music;
   try {
     const url = req.protocol + "://" + req.get("host");
 
     const { name, genre } = req.body;
     const existingMusic = await Music.findOne({ name });
 
-    const music = req.file.filename;
+    music = req.file.filename;
     const musicUrl = url + "/uploads/" + music;
 
     if (existingMusic) {
@@ -28,6 +29,11 @@ const uploadMusic = async (req, res, next) => {
     }
   } catch (err) {
     // res.status(500).json(error);
+    if (music !== undefined) {
+      const newMusicPath = "./../uploads/" + music;
+
+      deleteMusicFile(newMusicPath);
+    }
 
     next(err);
   }
